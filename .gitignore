@@ -28,3 +28,5 @@ scratch
 packages/telescope-search/lib/client/views/search.html
 
 client/views/nav/nav.html
+
+packages/telescope-search/lib/client/views/search.html
