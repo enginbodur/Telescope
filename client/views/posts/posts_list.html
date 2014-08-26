@@ -6,7 +6,9 @@
   		{{/each}}
     </div>
     {{#if hasMorePosts}}
-      <a class="more-button grid-module" href="{{loadMoreUrl}}"><span>{{i18n "Load more"}}</span></a>
+      <div class="more-button">
+        <a href="{{loadMoreUrl}}">{{i18n "Load more"}}</a>
+      </div>
     {{/if}}
   </div>
 </template>

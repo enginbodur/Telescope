@@ -22,26 +22,26 @@ Template[getTemplate('comment_form')].events({
     if(getCurrentTemplate() == 'comment_reply'){
       // child comment
       var parentComment = this.comment;
-      Meteor.call('comment', parentComment.postId, parentComment._id, content, function(error, newComment){
+      Meteor.call('comment', parentComment.postId, parentComment._id, content, function(error, commentProperties){
         if(error){
           console.log(error);
           throwError(error.reason);
         }else{
-          trackEvent("newComment", newComment);
-          Router.go('/posts/'+parentComment.postId+'/comment/'+newComment._id);
+          trackEvent("newComment", commentProperties);
+          Router.go('/posts/'+parentComment.postId+'/comment/'+commentProperties.commentId);
         }
       });
     }else{
       // root comment
       var post = postObject;
 
-      Meteor.call('comment', post._id, null, content, function(error, newComment){
+      Meteor.call('comment', post._id, null, content, function(error, commentProperties){
         if(error){
           console.log(error);
           throwError(error.reason);
         }else{
-          trackEvent("newComment", newComment);
-          Session.set('scrollToCommentId', newComment._id);
+          trackEvent("newComment", commentProperties);
+          Session.set('scrollToCommentId', commentProperties.commentId);
           instance.editor.importFile('editor', '');
         }
       });

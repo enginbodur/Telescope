@@ -24,12 +24,12 @@ postSchemaObject = {
     type: String,
     optional: true
   },
-  commentsCount: {
-    type: Number,
+  author: {
+    type: String,
     optional: true
   },
-  commenters: {
-    type: [String],
+  comments: {
+    type: Number,
     optional: true
   },
   lastCommentedAt: {
@@ -114,46 +114,12 @@ Posts.allow({
 
 clickedPosts = [];
 
-getPostProperties = function(post) {
-
-  var postAuthor = Meteor.users.findOne(post.userId)
-  var p = {
-    postAuthorName : getDisplayName(postAuthor),
-    postTitle : cleanUp(post.title),
-    profileUrl: getProfileUrlById(post.userId),
-    postUrl: getPostPageUrl(post),
-    thumbnailUrl: post.thumbnailUrl,
-    linkUrl: !!post.url ? getOutgoingUrl(post.url) : getPostPageUrl(post._id)
-  };
-  
-  if(post.url)
-    p.url = post.url;
-
-  if(post.body)
-    p.body = marked(post.body);
-
-  return p;
-}
-
-getPostPageUrl = function(post){
-  return getSiteUrl()+'posts/'+post._id;
-};
-
-getPostEditUrl = function(id){
-  return getSiteUrl()+'posts/'+id+'/edit';
-};
-
-// for a given post, return its link if it has one, or else its post page URL
-getPostLink = function (post) {
-  return !!post.url ? getOutgoingUrl(post.url) : getPostPageUrl(post);
-}
-
 Meteor.methods({
   post: function(post){
     var title = cleanUp(post.title),
         body = cleanUp(post.body),
-        userId = this.userId,
-        user = Meteor.users.findOne(userId),
+        user = Meteor.user(),
+        userId = user._id,
         timeSinceLastPost=timeSinceLast(user, Posts),
         numberOfPostsInPast24Hours=numberOfItemsInPast24Hours(user, Posts),
         postInterval = Math.abs(parseInt(getSetting('postInterval', 30))),
@@ -257,12 +223,21 @@ Meteor.methods({
 
     Meteor.call('upvotePost', post, postAuthor);
 
-    // notify users of new posts
-    if(Meteor.isServer && !!getSetting('emailNotifications', false)){
-      // we don't want emails to hold up the post submission, so we make the whole thing async with setTimeout
-      Meteor.setTimeout(function () {
-        newPostNotification(post, [userId])
-      }, 1);
+    if(getSetting('emailNotifications', false)){
+      // notify users of new posts
+      var notification = {
+        event: 'newPost',
+        properties: {
+          postAuthorName : getDisplayName(postAuthor),
+          postAuthorId : post.userId,
+          postTitle : title,
+          postId : post._id
+        }
+      };
+      // call a server method because we do not have access to users' info on the client
+      Meteor.call('newPostNotify', notification, function(error, result){
+        //run asynchronously
+      });
     }
 
     return post;

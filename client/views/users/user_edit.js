@@ -35,7 +35,7 @@ Template[getTemplate('user_edit')].helpers({
 })
 
 Template[getTemplate('user_edit')].events({
-  'submit #account-form': function(e){
+  'submit form': function(e){
     e.preventDefault();
 
     clearSeenErrors();

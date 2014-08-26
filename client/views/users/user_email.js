@@ -1,9 +1,6 @@
 Template[getTemplate('user_email')].helpers({
   user: function(){
     return Meteor.user();
-  },
-  username: function () {
-    return getUserName(Meteor.user());
   }
 });
 
@@ -29,7 +26,7 @@ Template[getTemplate('user_email')].events({
         throwError(error.reason);
       } else {
         throwError(i18n.t('Thanks for signing up!'));
-        // Meteor.call('addCurrentUserToMailChimpList');
+        Meteor.call('addCurrentUserToMailChimpList');
         trackEvent("new sign-up", {'userId': user._id, 'auth':'twitter'});
         Router.go('/');
       }

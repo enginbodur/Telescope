@@ -1,15 +1,17 @@
-Package.describe({summary: "Telescope Hubble theme"});
+Package.describe("Telescope Hubble theme");
 
 Package.on_use(function (api) {
 
-  api.use(['telescope-lib', 'telescope-base'], ['client', 'server']);
+  // api.use(['telescope-lib'], ['client', 'server']);
+
+  // api.use([
+  //   'jquery',
+  //   'underscore',
+  //   'templating'
+  // ], 'client');
 
   api.add_files([
-    'lib/hubble.js',
-    ], ['client', 'server']);
-
-  api.add_files([
-    'lib/client/css/screen.css',
+    'lib/client/stylesheets/screen.css',
     ], ['client']);
   
 });

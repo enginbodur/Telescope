@@ -17,15 +17,21 @@ Template[getTemplate('layout')].helpers({
   pageName : function(){
     // getCurrentTemplate();
   },
-  css: function () {
-    return getTemplate('css');
+  backgroundCSS: function(){
+  	return getSetting('backgroundCSS');
   },
-  heroModules: function () {
-    return heroModules;
+  secondaryColor: function(){
+  	return getSetting('secondaryColor');
   },
-  getTemplate: function () {
-    return getTemplate(this.template);
-  }
+  buttonColor: function(){
+  	return getSetting('buttonColor');
+  },
+  headerColor: function(){
+  	return getSetting('headerColor');
+  },
+  extraCode: function(){
+    return getSetting('extraCode');
+  }     
 });
 
 Template[getTemplate('layout')].created = function(){

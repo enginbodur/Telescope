@@ -19,8 +19,6 @@ Package.on_use(function (api) {
     'camelToDash',
     'dashToCamel',
     'getSetting',
-    'getThemeSetting',
-    'getSiteUrl',
-    'trimWords'
+    'getSiteUrl'
   ]);
 });
