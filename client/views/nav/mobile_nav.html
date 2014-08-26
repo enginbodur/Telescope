@@ -3,19 +3,17 @@
     <div class="mobile-nav-inner">
 
       <ul class="mobile-menu">
-        {{#each navItems}}
+        {{#each primaryNav}}
           <li>
-            {{> UI.dynamic template=this}}
+            {{> UI.dynamic template=getTemplate}}
+          </li>
+        {{/each}}
+        {{#each secondaryNav}}
+          <li>
+            {{> UI.dynamic template=getTemplate}}
           </li>
         {{/each}}
       </ul>
-
-      {{#if canView}}
-        <ul class="mobile-submit">
-          <li><a id="submit" class="submit button" href="/submit">{{i18n "Post"}}</a></li>
-        </ul>
-      {{/if}}
-
     </div>
   </div>
 </template>
