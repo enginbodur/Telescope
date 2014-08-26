@@ -1,5 +1,5 @@
 <template name="user_profile">
-	<div class="grid">
+	<div class="grid grid-module">
 		{{#with user}}
 		<div class="user-profile grid-block">
 			<table>
@@ -53,6 +53,23 @@
 					<a class="button inline disabled" href="#">{{i18n "Invite (none left)"}}</a>
 				{{/if}}
 			{{/if}}
+		</div>
+		<div class="user-profile-votes grid-block">
+		<h3>{{i18n "Upvoted Posts"}}</h3>
+		<table>
+		<thead>
+			<tr>
+				<td>Post</td>
+				<td>Upvoted At</td>
+			</tr>
+		</thead>
+		{{#each upvotes}}
+			<tr>
+				<td><a href="/posts/{{_id}}/">{{title}}</a></td>
+				<td>{{formatDate votedAt "MM/DD/YYYY, HH:mm"}}</td>
+			</tr>
+		{{/each}}
+		</table>
 		</div>
 		{{/with}}
 	</div>

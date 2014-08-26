@@ -1,3 +1,31 @@
+## v0.9.2.6 “InviteScope”
+
+* Added new invite features (thanks [@callmephilip](https://github.com/callmephilip)!)
+* Changed `navItems` to `primaryNav` and added `secondaryNav`. 
+* Added new `themeSettings` object for storing theme-level settings.
+* Notifications is now a nav menu item. 
+* Renamed `comments` to `commentsCount` on `Post` model.
+* Now tracking list of commenters `_id`s on `Post` model.
+* Rerun interrupted migrations. 
+
+## v0.9.2.5 “AccountScope”
+
+* Now keeping track of upvoted/downvoted posts & comments.
+* Using [accounts-entry](https://github.com/Differential/accounts-entry/) for accounts stuff.
+* Split out part of the Hubble theme into a new “base” theme.
+
+## v0.9.2 “MailScope”
+
+* Use [handlebars-server](https://github.com/EventedMind/meteor-handlebars-server) for all email templates. 
+* Refactored email system to use global HTML email wrapper.
+* Added routes to preview email templates. 
+* Changed how notifications are stored in db.
+* Added `deleteNotifications` migration to delete all existing notifications.
+* Now using templates for on-site notifications too.
+* Added `heroModules` and `footerModules` hooks.
+* Added [telescope-newsletter](https://github.com/TelescopeJS/Telescope-Newsletter) package. 
+* Sending emails from within `setTimeout`s to fix latency compensation issue. 
+
 ## v0.9.1.2
 
 * Added `lastCommentedAt` property to posts. 

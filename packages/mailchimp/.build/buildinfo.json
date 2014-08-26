@@ -1,0 +1,43 @@
+{
+  "builtBy": "meteor/10",
+  "sliceDependencies": {
+    "browser.json": {
+      "files": {
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/package.js": "eb1aa8280137eec43cfd23318ce1cc7e25c631d3"
+      },
+      "directories": []
+    },
+    "os.json": {
+      "files": {
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/package.js": "eb1aa8280137eec43cfd23318ce1cc7e25c631d3",
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/.npm/package/npm-shrinkwrap.json": "fb73abf10e98128a0615b9afa03055b417cabaab",
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/mailchimp.js": "cb54bc2ae9009e63ab6481a9d49838086bf836d3"
+      },
+      "directories": []
+    },
+    "tests.browser.json": {
+      "files": {
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/package.js": "eb1aa8280137eec43cfd23318ce1cc7e25c631d3"
+      },
+      "directories": []
+    },
+    "tests.os.json": {
+      "files": {
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/package.js": "eb1aa8280137eec43cfd23318ce1cc7e25c631d3",
+        "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/.npm/package/npm-shrinkwrap.json": "fb73abf10e98128a0615b9afa03055b417cabaab"
+      },
+      "directories": []
+    }
+  },
+  "pluginDependencies": {
+    "files": {
+      "/Users/enginbodur/GitHub/Telescope/packages/mailchimp/package.js": "eb1aa8280137eec43cfd23318ce1cc7e25c631d3"
+    },
+    "directories": []
+  },
+  "pluginProviderPackages": {
+    "mailchimp": "/Users/enginbodur/GitHub/Telescope/packages/mailchimp",
+    "meteor": "/Users/enginbodur/.meteor/packages/meteor/d06ae22393"
+  },
+  "source": "/Users/enginbodur/GitHub/Telescope/packages/mailchimp"
+}
