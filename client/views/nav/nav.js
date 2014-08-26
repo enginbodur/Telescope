@@ -33,7 +33,7 @@ Template[getTemplate('nav')].helpers({
 
 Template[getTemplate('nav')].rendered = function(){
   if(!Meteor.loggingIn() && !Meteor.user()){
-    $('.login-link-text').text("Sign Up/Sign In");
+    $('.login-link-text').text("Üye ol/Giriş");
   }
 };
 
@@ -52,8 +52,8 @@ Template[getTemplate('nav')].events({
   },
   'click #login-name-link': function(e){
     if(Meteor.user() && !$('account-link').exists()){
-      $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().slug+'" class="account-link button">View Profile</a>');
-      $('#login-buttons-logout').before('<a href="/account" class="account-link button">Edit Account</a>');
+      $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().slug+'" class="account-link button">Profilim</a>');
+      $('#login-buttons-logout').before('<a href="/account" class="account-link button">Profil Düzenle</a>');
     }  
   }
 });
