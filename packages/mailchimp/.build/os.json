@@ -1,0 +1,25 @@
+{
+  "format": "unipackage-slice-pre1",
+  "packageVariables": [
+    {
+      "name": "MailChimpAPI",
+      "export": true
+    }
+  ],
+  "uses": [
+    {
+      "package": "meteor"
+    }
+  ],
+  "node_modules": "npm/node_modules",
+  "resources": [
+    {
+      "type": "prelink",
+      "file": "os/packages/mailchimp.js",
+      "length": 1952,
+      "offset": 0,
+      "servePath": "/packages/mailchimp.js",
+      "sourceMap": "os/packages/mailchimp.js.map"
+    }
+  ]
+}

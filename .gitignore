@@ -25,3 +25,6 @@ scratch
 
 .deploy
 .deploy/*
+packages/telescope-search/lib/client/views/search.html
+
+client/views/nav/nav.html

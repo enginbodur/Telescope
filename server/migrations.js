@@ -13,21 +13,32 @@ Meteor.startup(function () {
 
 // wrapper function for all migrations
 var runMigration = function (migrationName) {
-  // migration updatePostStatus: make sure posts have a status
-  if (!Migrations.findOne({name: migrationName})) {
-    console.log("//----------------------------------------------------------------------//");
-    console.log("//------------//    Starting "+migrationName+" Migration    //-----------//");
-    console.log("//----------------------------------------------------------------------//");
-    Migrations.insert({name: migrationName, startedAt: new Date(), completed: false});
+  var migration = Migrations.findOne({name: migrationName});
 
-    // execute migration function
-    var itemsAffected = migrationsList[migrationName]() || 0;
-
-    Migrations.update({name: migrationName}, {$set: {finishedAt: new Date(), completed: true, itemsAffected: itemsAffected}});
-    console.log("//----------------------------------------------------------------------//");
-    console.log("//------------//     Ending "+migrationName+" Migration     //-----------//");
-    console.log("//----------------------------------------------------------------------//");
+  if (migration){
+    if(typeof migration.finishedAt === 'undefined'){
+      // if migration exists but hasn't finished, remove it and start fresh
+      console.log('!!! Found incomplete migration "'+migrationName+'", removing and running again.')
+      Migrations.remove({name: migrationName});
+    }else{
+      // do nothing
+      // console.log('Migration "'+migrationName+'" already exists, doing nothing.')
+      return
+    }
   }
+
+  console.log("//----------------------------------------------------------------------//");
+  console.log("//------------//    Starting "+migrationName+" Migration    //-----------//");
+  console.log("//----------------------------------------------------------------------//");
+  Migrations.insert({name: migrationName, startedAt: new Date(), completed: false});
+
+  // execute migration function
+  var itemsAffected = migrationsList[migrationName]() || 0;
+
+  Migrations.update({name: migrationName}, {$set: {finishedAt: new Date(), completed: true, itemsAffected: itemsAffected}});
+  console.log("//----------------------------------------------------------------------//");
+  console.log("//------------//     Ending "+migrationName+" Migration     //-----------//");
+  console.log("//----------------------------------------------------------------------//");
 }
 
 var migrationsList = {
@@ -267,6 +278,37 @@ var migrationsList = {
       var postComments = Comments.find({postId: post._id}, {sort: {postedAt: -1}}).fetch();
       var lastComment = postComments[0];
       Posts.update(post._id, { $set: { lastCommentedAt: lastComment.postedAt}}, {multi: false, validate: false});
+      console.log("---------------------");
+    });
+    return i;
+  },
+  deleteNotifications: function () {
+    var i = 0;
+    Notifications.find().forEach(function (n) {
+      i++;
+      console.log("Notification: "+n._id);
+      Notifications.remove(n._id);
+      console.log("---------------------");
+    });
+    return i;
+  },
+  commentsToCommentsCount: function () {
+    var i = 0;
+    Posts.find({commentsCount: {$exists : false}}).forEach(function (post) {
+      i++;
+      console.log("Post: "+post._id);
+      Posts.update(post._id, { $rename: { 'comments': 'commentsCount'}}, {multi: true, validate: false});
+      console.log("---------------------");
+    });
+    return i;
+  },
+  addCommentersToPosts: function () {
+    var i = 0;
+    Comments.find().forEach(function (comment) {
+      i++;
+      console.log("Comment: "+comment._id);
+      console.log("Post: "+comment.postId);
+      Posts.update(comment.postId, { $addToSet: { 'commenters': comment.userId}}, {multi: true, validate: false});
       console.log("---------------------");
     });
     return i;

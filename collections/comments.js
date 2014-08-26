@@ -90,14 +90,7 @@ Meteor.methods({
         timeSinceLastComment=timeSinceLast(user, Comments),
         cleanText= cleanUp(text),
         commentInterval = Math.abs(parseInt(getSetting('commentInterval',15))),
-        now = new Date(),
-        properties={
-          'commentAuthorId': user._id,
-          'commentAuthorName': getDisplayName(user),
-          'commentExcerpt': trimWords(stripMarkdown(cleanText),20),
-          'postId': postId,
-          'postTitle' : post.title
-        };
+        now = new Date();
 
     // check that user can comment
     if (!user || !canComment(user))
@@ -135,11 +128,18 @@ Meteor.methods({
     // extend comment with newly created _id
     comment = _.extend(comment, {_id: newCommentId});
 
-    Posts.update(postId, {$inc: {comments: 1}, $set: {lastCommentedAt: now}});
+    Posts.update(postId, {
+      $inc:       {commentsCount: 1},
+      $set:       {lastCommentedAt: now},
+      $addToSet:  {commenters: user._id}
+    });
 
     Meteor.call('upvoteComment', comment);
 
-    properties.commentId = newCommentId;
+    var notificationProperties = {
+      comment: _.pick(comment, '_id', 'userId', 'author', 'body'),
+      post: _.pick(post, '_id', 'title', 'url')
+    }
 
     if(!this.isSimulation){
       if(parentCommentId){
@@ -147,58 +147,35 @@ Meteor.methods({
         var parentComment=Comments.findOne(parentCommentId);
         var parentUser=Meteor.users.findOne(parentComment.userId);
 
-        properties.parentCommentId = parentCommentId;
-        properties.parentAuthorId = parentComment.userId;
-        properties.parentAuthorName = getDisplayName(parentUser);
+        notificationProperties.parentComment = _.pick(parentComment, '_id', 'userId', 'author');
 
-        if(!this.isSimulation){
           // reply notification
           // do not notify users of their own actions (i.e. they're replying to themselves)
-          if(parentUser._id != user._id){
-            createNotification({
-              event: 'newReply',
-              properties: properties,
-              userToNotify: parentUser,
-              userDoingAction: user,
-              sendEmail: getUserSetting('notifications.replies', false, parentUser)
-            });
-          }
+          if(parentUser._id != user._id)
+            createNotification('newReply', notificationProperties, parentUser);
 
           // comment notification
           // if the original poster is different from the author of the parent comment, notify them too
-          if(postUser._id != user._id && parentComment.userId != post.userId){
-            createNotification({
-              event: 'newComment',
-              properties: properties,
-              userToNotify: postUser,
-              userDoingAction: user,
-              sendEmail: getUserSetting('notifications.comments', false, postUser)
-            });
-          }
-        }
+          if(postUser._id != user._id && parentComment.userId != post.userId)
+            createNotification('newComment', notificationProperties, postUser);
+
       }else{
-        if(!this.isSimulation){
           // root comment
           // don't notify users of their own comments
-          if(postUser._id != user._id){
-            createNotification({
-              event: 'newComment',
-              properties: properties,
-              userToNotify: postUser,
-              userDoingAction: Meteor.user(),
-              sendEmail: getUserSetting('notifications.comments', false, postUser)
-            });
-          }
-        }
+          if(postUser._id != user._id)
+            createNotification('newComment', notificationProperties, postUser);
       }
     }
-    return properties;
+    return comment;
   },
   removeComment: function(commentId){
     var comment=Comments.findOne(commentId);
     if(canEdit(Meteor.user(), comment)){
-      // decrement post comment count
-      Posts.update(comment.postId, {$inc: {comments: -1}});
+      // decrement post comment count and remove user ID from post
+      Posts.update(comment.postId, {
+        $inc:   {commentsCount: -1},
+        $pull:  {commenters: comment.userId}
+      });
 
       // decrement user comment count
       Meteor.users.update({_id: comment.userId}, {$inc: {commentCount: -1}});
