@@ -13,6 +13,16 @@
     "bootstrap3-datepicker": {},
     "subs-manager": {},
     "telescope-module-embedly": {},
+<<<<<<< HEAD
     "telescope-newsletter": {}
+=======
+    "handlebars-server": {},
+    "npm": {},
+    "mailchimp": {},
+    "synced-cron": {},
+    "cookies": {},
+    "telescope-newsletter": {},
+    "accounts-entry": {}
+>>>>>>> upstream/master
   }
 }

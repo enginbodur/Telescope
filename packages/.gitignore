@@ -32,4 +32,17 @@ i18next-meteor
 /iron-layout
 /iron-core
 /iron-dynamic-template
+<<<<<<< HEAD
 /telescope-newsletter
+=======
+/handlebars-server
+/npm
+/mailchimp
+/synced-cron
+/cookies
+/telescope-newsletter
+/accounts-entry
+/accounts-t9n
+/simple-form
+/underscore-string-latest
+>>>>>>> upstream/master
